@@ -1,0 +1,9 @@
+DEFAULT      = "#000000"   # noir     : pas touché / retour à la normale
+DEFAULT_W = "#6584A3"
+CURRENT_NODE = "#2980B9"   # bleu     : sommet en cours de traitement
+CURRENT_EDGE = "#2980B9"   # bleu     : arête en cours d'examen
+DECOUVERTE   = "#F39C12"   # orange   : découvert, en attente
+MAJ          = "#27AE60"   # vert     : distance améliorée
+REJET        = "#E74C3C"   # gris     : arête testée, rien ne change
+END          = "#8E44AD"   # violet   : terminé / distance définitive
+CYCLE        = "#812703"   # rouge    : cycle négatif (alarme)
