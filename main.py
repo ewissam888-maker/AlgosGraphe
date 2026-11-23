@@ -34,14 +34,18 @@ def main():
               Algos.Bellman_ford,
               Algos.Floyd_Warshall,
               Algos.Prim,
-                  #Algos.Kruskal
+              Algos.Kruskal
                   ]
     Algo = _Algos[int(input(">> "))-1]
-    s = input("Choisissez un sommet : ").upper()
+    
     
     if Algo == Algos.Dijkstra or Algo == Algos.Bellman_ford or Algo == Algos.Prim:
+        s = input("Choisissez un sommet : ").upper()
         etapes = Algo([g.edges,g.weight], s)
+    elif Algo == Algos.Kruskal:
+        etapes = Algo([g.edges,g.weight])
     else:
+        s = input("Choisissez un sommet : ").upper()
         etapes = Algo(g.edges, s)
     
     g.launch(etapes)

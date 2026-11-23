@@ -12,6 +12,7 @@ class Create_Graphe:
     RAYON = 20
     MARGE = 40 
     DIST_MIN = 90
+    ANGLE_MIN = 25   # degrés mini entre deux arêtes d'un même sommet
     
     def __init__(self, nom, nbNodes, oriented, weighted, neg_weighted):
         
@@ -69,7 +70,23 @@ class Create_Graphe:
     
     
    
-            
+    def arete_valide(self, u, v):
+        pos = {n[0]: n[1] for n in self.Nodes}
+
+        for centre, autre in ((u, v), (v, u)):
+            voisins = set(self.edges[centre])
+            voisins.update(x for x in self.edges if centre in self.edges[x])
+
+            for w in voisins:
+                if w == autre:
+                    continue
+                a1 = math.atan2(pos[autre][1] - pos[centre][1], pos[autre][0] - pos[centre][0])
+                a2 = math.atan2(pos[w][1] - pos[centre][1], pos[w][0] - pos[centre][0])
+                angle = abs(math.degrees(a1 - a2)) % 360
+                angle = min(angle, 360 - angle)
+                if angle < self.ANGLE_MIN:
+                    return False
+        return True
 
     
     
@@ -82,11 +99,12 @@ class Create_Graphe:
             for v in random.sample(candidats, nb_neighbours):
                 if v in self.edges[u] or u in self.edges[v]:
                     continue                    # déjà reliés, dans un sens ou l'autre
-
+                if not self.arete_valide(u, v):    # nouveau
+                    continue
                 self.edges[u].append(v)
                 if not self.oriented:
                     self.edges[v].append(u)
-
+                
                 if self.weighted:
                     bas = -20 if self.neg_weighted else 0
                     p = random.randint(bas, 20)

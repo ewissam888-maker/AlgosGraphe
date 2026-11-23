@@ -173,3 +173,56 @@ def Prim(G,s):
     print(events)
     return events
     
+    
+
+
+
+
+def find(F,u):
+    if F[u] != u:
+        F[u] = find(F,F[u])
+    return F[u]
+
+def union(F, u, v):
+    F[find(F,u)] = find(F,v)
+    
+
+
+def Kruskal(G):
+    poids = G[1]
+    G = G[0]
+    F = {u: u for u in G}
+    A = []
+    events = []
+    poids = sorted((w, u, v) for (u, v), w in poids.items() if u < v)
+    w,u,v = poids[0]
+    events.append([("edge", (u,v), CONFIG.DECOUVERTE)])
+    for i in range(0,len(poids)):
+        w,u,v = poids[i]
+        
+        
+        if find(F,u) != find(F,v):
+            if i + 1 >= len(poids): 
+                events.append([("node", u, CONFIG.MAJ),("edge", (u,v), CONFIG.MAJ)])
+                continue
+            wp,up,vp = poids[i+1]
+            events.append([("node", u, CONFIG.MAJ),
+                           ("node", v, CONFIG.MAJ),
+                           ("edge", (u,v), CONFIG.MAJ),
+                           ("edge", (up,vp), CONFIG.DECOUVERTE)])
+            A.append((u,v))
+            union(F,u,v)
+        else:
+            
+            
+            if i + 1 >= len(poids):      
+                events.append([("edge", (u,v), CONFIG.REJET)])
+                events.append([("edge", (u,v), CONFIG.DEFAULT)])
+                continue
+            wp,up,vp = poids[i+1]
+            
+            events.append([("edge", (u,v), CONFIG.REJET),("edge", (up,vp), CONFIG.DECOUVERTE)])
+            events.append([("edge", (u,v), CONFIG.DEFAULT)])
+    print(A)
+    return events
+    
